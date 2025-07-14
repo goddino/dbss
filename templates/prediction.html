@@ -7,8 +7,14 @@
 <body>
     <div class="container">
         <h2>Predicted DBS share price : {{r}}</h2>
-        <form action="/" method="post">
+        <form action="/main" method="post">
             <input type="submit" value="Main">
+        </form>
+        <form action="/dbs" method="post">
+            <input type="submit" value="Predict again">
+        </form>
+        <form action="/" method="post">
+            <input type="submit" value="Login">
         </form>
     </div>
 </body>
