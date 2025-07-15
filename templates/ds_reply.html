@@ -1,0 +1,20 @@
+<head>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',
+        filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>DeepSeek:</h2>
+        <pre style="max-height: 300px; overflow: auto; background: #f5f5f5; padding: 10px; white-space: pre-wrap;">
+        {{r}}
+        </pre>
+        <form action="/main" method="post">
+            <input type="submit" value="Main">
+        </form>
+        <form action="/ds" method="post">
+            <input type="submit" value="DeepSeek again">
+        </form>
+    </div>
+</body>

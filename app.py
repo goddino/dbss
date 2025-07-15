@@ -29,6 +29,10 @@ def dbs():
 def llama():
     return(render_template("llama.html"))
            
+@app.route("/ds",methods=["GET","POST"])
+def ds():
+    return(render_template("ds.html"))
+           
 @app.route("/prediction",methods=["GET","POST"])
 def prediction():
     q = float(request.form.get("q"))
@@ -56,6 +60,23 @@ def llama_reply():
         ]
     )
     return(render_template("llama_reply.html",r=completion.choices[0].message.content))
-           
+
+@app.route("/ds_reply",methods=["GET","POST"])
+def ds_reply():
+    q = request.form.get("q")
+
+    # load model
+    completion = client.chat.completions.create(
+        model="deepseek-r1-distill-llama-70b",
+        messages=[
+            {
+                "role": "user",
+                "content": "Explain why fast inference is critical for reasoning models"
+            }
+        ]
+    )
+    return(render_template("ds_reply.html",r=completion.choices[0].message.content))
+
+
 if __name__ == "__main__":
     app.run()
