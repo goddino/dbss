@@ -71,7 +71,7 @@ def ds_reply():
         messages=[
             {
                 "role": "user",
-                "content": "Explain why fast inference is critical for reasoning models"
+                "content": q
             }
         ]
     )
