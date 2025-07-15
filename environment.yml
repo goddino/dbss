@@ -1,0 +1,11 @@
+# environment.yml
+name: m5dbss
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - flask
+  - joblib
+  - scikit-learn
+  - pip:
+    - groq

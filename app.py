@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 from groq import Groq
 import os
-
 import joblib
 
 #https://console.groq.com/keys
@@ -35,15 +34,19 @@ def ds():
            
 @app.route("/prediction",methods=["GET","POST"])
 def prediction():
-    q = float(request.form.get("q"))
-
-    # load model
+    q : float
+    try:
+        q = float(request.form.get("q", 1.35))  # Default to 1.35 if "q" not submitted in form.
+    except (ValueError, TypeError):
+        q = 1.35  # Default value if q was submitted as '' or some invalid value.
+    
+    # Load model from file.
     model = joblib.load("dbs.jl")
 
-    # make prediction
+    # Make prediction
     pred = model.predict([[q]])
 
-    return(render_template("prediction.html",r=pred[0][0]))
+    return(render_template("prediction.html",r=pred[0][0], q=q))
            
 @app.route("/llama_reply",methods=["GET","POST"])
 def llama_reply():
