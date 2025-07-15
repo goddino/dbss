@@ -5,11 +5,9 @@ import os
 import joblib
 
 #https://console.groq.com/keys
-groq_api = os.environ.get('groq')
-if groq_api == None:
-    groq_api = ""
+if os.environ.get('GROQ_API_KEY') == None:
+    os.environ['GROQ_API_KEY'] = ""
 
-os.environ['GROQ_API_KEY'] = groq_api
 client = Groq()
 
 app = Flask(__name__)
