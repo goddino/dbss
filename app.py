@@ -117,7 +117,8 @@ def webhook():
         # Pass the query to the Groq model
         client = Groq()
         completion_ds = client.chat.completions.create(
-            model="deepseek-r1-distill-llama-70b",
+            # model="deepseek-r1-distill-llama-70b",
+            model="moonshotai/kimi-k2-instruct",
             messages=[
                 {
                     "role": "user",
