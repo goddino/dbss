@@ -7,5 +7,6 @@ dependencies:
   - flask
   - joblib
   - scikit-learn
+  - requests
   - pip:
     - groq
