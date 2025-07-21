@@ -4,6 +4,7 @@ channels:
   - conda-forge
 dependencies:
   - python
+  - gunicorn
   - flask
   - joblib
   - scikit-learn
