@@ -3,6 +3,8 @@ from groq import Groq
 import os
 import joblib
 import requests
+import pandas as pd
+import sklearn
 
 #https://console.groq.com/keys
 if os.environ.get('GROQ_API_KEY') == None:
@@ -23,6 +25,25 @@ def index():
 def main():
     # db
     return(render_template("main.html"))
+           
+@app.route("/spam",methods=["GET","POST"])
+def spam():
+    return(render_template("spam.html"))
+           
+@app.route("/spam_pred",methods=["GET","POST"])
+def spam_pred():
+    q : str
+    try:
+        q = str(request.form.get("q", "spam"))  # Default to "spam" if "q" not submitted in form.
+    except (ValueError, TypeError):
+        q = "spam"  # Default value if q was submitted as '' or some invalid value.
+    
+    # Load model from file.
+    model = joblib.load("lr_model.jl")
+
+    # Make prediction
+    pred = model.predict([[q]])
+    return(render_template("spam_pred.html",r=pred[0][0], q=q))
            
 @app.route("/dbs",methods=["GET","POST"])
 def dbs():
