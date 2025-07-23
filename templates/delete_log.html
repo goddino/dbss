@@ -6,13 +6,14 @@
 </head>
 <body>
     <div class="container">
-        <h2>LLAMA:</h2>
+        <h2>Deleted user log!</h2>
+        <h2>Current user log:</h2>
         <div class="scrollable-text">{{ r }}</div>
+        <form action="/user_log" method="post">
+            <input type="submit" value="User log">
+        </form>
         <form action="/main" method="post">
             <input type="submit" value="Main">
-        </form>
-        <form action="/llama" method="post">
-            <input type="submit" value="LLAMA again">
         </form>
     </div>
 </body>

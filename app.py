@@ -3,6 +3,9 @@ from groq import Groq
 import os
 import joblib
 import requests
+import sqlite3
+import datetime
+
 
 #https://console.groq.com/keys
 if os.environ.get('GROQ_API_KEY') == None:
@@ -15,6 +18,18 @@ client = Groq()
 
 app = Flask(__name__)
 
+def get_cursor_rows(c):
+    """
+    Helper function to fetch all rows from a cursor.
+    """
+    r=""
+    for row in c:
+        print(row)
+        r = r + str(row) + "\n"
+
+    if r == "":
+        r = "No records found."
+    return r
 @app.route("/",methods=["GET","POST"])
 def index():
     return(render_template("index.html"))
@@ -174,6 +189,38 @@ def stop_telegram():
         status = "Failed to stop the telegram bot webhook. Please check the logs."
     
     return(render_template("stop_telegram.html", status=status))
+
+@app.route("/user_log",methods=["GET","POST"])
+def user_log():
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    insert = request.form.get("insert", "false") == "true"
+    if insert:
+        # Insert new user log into the database
+        q = request.form.get("q", "inserted user")
+        t = datetime.datetime.now()
+        c.execute('INSERT INTO user (name, timestamp) VALUES (?, ?)', (q, t))
+        conn.commit()
+    # Check remaining records
+    c.execute('''select * from user''')
+    r = get_cursor_rows(c)
+    c.close()
+    conn.close()
+    return(render_template("user_log.html", r=r))
+
+@app.route("/delete_log",methods=["GET","POST"])
+def delete_log():
+    conn = sqlite3.connect('user.db')
+    c = conn.cursor()
+    # Delete all records from the user table
+    c.execute('DELETE FROM user',);
+    conn.commit()
+    # Check remaining records
+    c.execute('''select * from user''')
+    r = get_cursor_rows(c)
+    c.close()
+    conn.close()
+    return(render_template("delete_log.html", r=r))
 
 if __name__ == "__main__":
     app.run()

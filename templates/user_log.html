@@ -1,0 +1,31 @@
+<head>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',
+        filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>View user log</h2>
+        <div class="scrollable-text" id="scroll-text">{{ r }}</div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const div = document.getElementById('scroll-text');
+            div.scrollTop = div.scrollHeight;  // Scroll to bottom
+        });
+        </script>
+
+        <form action="/user_log" method="post">
+            <p>Please enter name to add to user log:</p>
+            <input type="string" name="q" autofocus>
+            <button type="submit" name="insert" value="true">Insert</button>
+            <button type="submit" name="insert" value="false">Refresh</button>
+        </form>
+        <form action="/delete_log" method="post">
+            <input type="submit" value="Delete log">
+        </form>
+        <form action="/main" method="post">
+            <input type="submit" value="Main">
+        </form>
+    </div>
+</body>

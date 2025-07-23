@@ -95,3 +95,12 @@ p {
         font-size: 16px;
     }
 }
+
+.scrollable-text {
+  white-space: pre-line;   /* Respects \n line breaks */
+  max-height: 300px;       /* Adjust height as needed */
+  overflow-y: auto;        /* Adds scrollbar if needed */
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-family: sans-serif;
+}
