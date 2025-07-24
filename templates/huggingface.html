@@ -1,0 +1,17 @@
+<head>
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',
+        filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+    <h2>Hugging Face Sepia 2</h2>
+    <script
+        type="module"
+        src="https://gradio.s3-us-west-2.amazonaws.com/5.38.1/gradio.js"
+    ></script>
+
+    <gradio-app src="https://goddino-sepia2.hf.space"></gradio-app>
+    </div>
+</body>

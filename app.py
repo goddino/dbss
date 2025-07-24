@@ -222,5 +222,9 @@ def delete_log():
     conn.close()
     return(render_template("delete_log.html", r=r))
 
+@app.route("/huggingface",methods=["GET","POST"])
+def huggingface():
+    return(render_template("huggingface.html"))
+
 if __name__ == "__main__":
     app.run()
