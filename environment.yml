@@ -11,3 +11,4 @@ dependencies:
   - requests
   - pip:
     - groq
+    - python-dotenv==1.1.0

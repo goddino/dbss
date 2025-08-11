@@ -5,11 +5,13 @@ import joblib
 import requests
 import sqlite3
 import datetime
+from dotenv import load_dotenv
 
+# Load .env variables to the environment.
+# Looks for a .env file in the dir of this script or searches for it incrementally higher up.
+load_dotenv()
 
-#https://console.groq.com/keys
-if os.environ.get('GROQ_API_KEY') == None:
-    os.environ['GROQ_API_KEY'] = ""
+# Get Telegram bot token from environment variable.
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 if TELEGRAM_BOT_TOKEN == None:
     TELEGRAM_BOT_TOKEN = ""
