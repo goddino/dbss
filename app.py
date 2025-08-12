@@ -11,10 +11,10 @@ from dotenv import load_dotenv
 # Looks for a .env file in the dir of this script or searches for it incrementally higher up.
 load_dotenv()
 
-# Get Telegram bot token from environment variable.
+# Get Telegram info from environment variable.
+TELEGRAM_BOT_NAME = os.environ.get('TELEGRAM_BOT_NAME')
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
-if TELEGRAM_BOT_TOKEN == None:
-    TELEGRAM_BOT_TOKEN = ""
+TELEGRAM_DOMAIN_URL = os.environ.get('TELEGRAM_DOMAIN_URL')
 
 client = Groq()
 
@@ -137,9 +137,9 @@ def telegram():
 
     if webhook_response.status_code == 200:
         # set status message
-        status = "The telegram bot is running. Please check with the telegram bot. @dsai_xr_bot"
+        status = f"The telegram bot is running at t.me/{TELEGRAM_BOT_NAME}."
     else:
-        status = "Failed to start the telegram bot. Please check the logs."
+        status = "Failed to start the telegram bot at t.me/{TELEGRAM_BOT_NAME}. Please check the logs."
     
     return(render_template("telegram.html", status=status))
 
@@ -179,16 +179,16 @@ def webhook():
 
 @app.route("/stop_telegram",methods=["GET","POST"])
 def stop_telegram():
-    domain_url = 'https://dbss-issn.onrender.com'
+    domain_url = TELEGRAM_DOMAIN_URL
     # The following line is used to delete the existing webhook URL for the Telegram bot
     delete_webhook_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/deleteWebhook"
     webhook_response = requests.post(delete_webhook_url, json={"url": domain_url, "drop_pending_updates": True})
 
     if webhook_response.status_code == 200:
         # set status message
-        status = "The telegram bot webhook has stopped. @dsai_xr_bot"
+        status = f"The telegram bot (t.me/{TELEGRAM_BOT_NAME}) webhook has stopped."
     else:
-        status = "Failed to stop the telegram bot webhook. Please check the logs."
+        status = "Failed to stop the telegram bot (t.me/{TELEGRAM_BOT_NAME}) webhook. Please check the logs."
     
     return(render_template("stop_telegram.html", status=status))
 
