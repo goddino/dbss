@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 # Looks for a .env file in the dir of this script or searches for it incrementally higher up.
 load_dotenv()
 
-# Get Telegram info from environment variable.
+# Get Telegram info from environment variables.
 TELEGRAM_BOT_NAME = os.environ.get('TELEGRAM_BOT_NAME')
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN')
 TELEGRAM_DOMAIN_URL = os.environ.get('TELEGRAM_DOMAIN_URL')
@@ -20,18 +20,6 @@ client = Groq()
 
 app = Flask(__name__)
 
-def get_cursor_rows(c):
-    """
-    Helper function to fetch all rows from a cursor.
-    """
-    r=""
-    for row in c:
-        print(row)
-        r = r + str(row) + "\n"
-
-    if r == "":
-        r = "No records found."
-    return r
 @app.route("/",methods=["GET","POST"])
 def index():
     return(render_template("index.html"))
@@ -41,56 +29,9 @@ def main():
     # db
     return(render_template("main.html"))
            
-@app.route("/spam",methods=["GET","POST"])
-def spam():
-    return(render_template("spam.html"))
-           
-@app.route("/spam_pred",methods=["GET","POST"])
-def spam_pred():
-    q : str
-    try:
-        q = str(request.form.get("q", "spam"))  # Default to "spam" if "q" not submitted in form.
-    except (ValueError, TypeError):
-        q = "spam"  # Default value if q was submitted as '' or some invalid value.
-    
-    # Load models from file.
-    model = joblib.load("lr_model.jl")
-    cv = joblib.load("cv_model.jl")
-
-    # Make prediction
-    q_cv = cv.transform([q])
-    pred = model.predict(q_cv)
-    r = "No." if pred[0] == "ham" else "Yes!"
-        
-    return(render_template("spam_pred.html",r=r, q=q))
-           
-@app.route("/dbs",methods=["GET","POST"])
-def dbs():
-    return(render_template("dbs.html"))
-           
 @app.route("/llama",methods=["GET","POST"])
 def llama():
     return(render_template("llama.html"))
-           
-@app.route("/ds",methods=["GET","POST"])
-def ds():
-    return(render_template("ds.html"))
-           
-@app.route("/prediction",methods=["GET","POST"])
-def prediction():
-    q : float
-    try:
-        q = float(request.form.get("q", 1.35))  # Default to 1.35 if "q" not submitted in form.
-    except (ValueError, TypeError):
-        q = 1.35  # Default value if q was submitted as '' or some invalid value.
-    
-    # Load model from file.
-    model = joblib.load("dbs.jl")
-
-    # Make prediction
-    pred = model.predict([[q]])
-
-    return(render_template("prediction.html",r=pred[0][0], q=q))
            
 @app.route("/llama_reply",methods=["GET","POST"])
 def llama_reply():
@@ -108,6 +49,11 @@ def llama_reply():
     )
     return(render_template("llama_reply.html",r=completion.choices[0].message.content))
 
+@app.route("/ds",methods=["GET","POST"])
+def ds():
+    return(render_template("ds.html"))
+           
+          
 @app.route("/ds_reply",methods=["GET","POST"])
 def ds_reply():
     q = request.form.get("q")
@@ -139,7 +85,7 @@ def telegram():
         # set status message
         status = f"The telegram bot is running at t.me/{TELEGRAM_BOT_NAME}."
     else:
-        status = "Failed to start the telegram bot at t.me/{TELEGRAM_BOT_NAME}. Please check the logs."
+        status = f"Failed to start the telegram bot at t.me/{TELEGRAM_BOT_NAME}. Please check the logs."
     
     return(render_template("telegram.html", status=status))
 
@@ -201,6 +147,62 @@ def webhook():
             "text": response_message
         })
     return('ok', 200)
+
+@app.route("/spam",methods=["GET","POST"])
+def spam():
+    return(render_template("spam.html"))
+           
+@app.route("/spam_pred",methods=["GET","POST"])
+def spam_pred():
+    q : str
+    try:
+        q = str(request.form.get("q", "spam"))  # Default to "spam" if "q" not submitted in form.
+    except (ValueError, TypeError):
+        q = "spam"  # Default value if q was submitted as '' or some invalid value.
+    
+    # Load models from file.
+    model = joblib.load("lr_model.jl")
+    cv = joblib.load("cv_model.jl")
+
+    # Make prediction
+    q_cv = cv.transform([q])
+    pred = model.predict(q_cv)
+    r = "No." if pred[0] == "ham" else "Yes!"
+        
+    return(render_template("spam_pred.html",r=r, q=q))
+           
+@app.route("/dbs",methods=["GET","POST"])
+def dbs():
+    return(render_template("dbs.html"))
+
+@app.route("/prediction",methods=["GET","POST"])
+def prediction():
+    q : float
+    try:
+        q = float(request.form.get("q", 1.35))  # Default to 1.35 if "q" not submitted in form.
+    except (ValueError, TypeError):
+        q = 1.35  # Default value if q was submitted as '' or some invalid value.
+    
+    # Load model from file.
+    model = joblib.load("dbs.jl")
+
+    # Make prediction
+    pred = model.predict([[q]])
+
+    return(render_template("prediction.html",r=pred[0][0], q=q))
+ 
+def get_cursor_rows(c):
+    """
+    Helper function to fetch all rows from a cursor.
+    """
+    r=""
+    for row in c:
+        print(row)
+        r = r + str(row) + "\n"
+
+    if r == "":
+        r = "No records found."
+    return r
 
 @app.route("/user_log",methods=["GET","POST"])
 def user_log():
